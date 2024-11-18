@@ -1,0 +1,7 @@
+build:
+  commands:
+    - echo "No build needed for a static site"
+artifacts:
+  baseDirectory: .
+cache:
+  paths: []
