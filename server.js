@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const io = require('socket.io')(server);
 
 app.use(cors({
-    origin: '*', // Allow all origins, change this to a specific domain for production
+    origin: 'https://myleschatapp.click', // Allow all origins, change this to a specific domain for production
 }));
 // Serve static files
 app.use(express.static(__dirname));
