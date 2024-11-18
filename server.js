@@ -12,6 +12,7 @@ app.use(cors({
 }));
 // Serve static files
 app.use(express.static(__dirname));
+app.use('/socket.io-client', express.static(path.join(__dirname, 'node_modules/socket.io-client/dist')));
 
 // Serve index.html when the root URL is accessed
 app.get('/', (req, res) => {
@@ -35,14 +36,17 @@ io.on('connection', socket => {
         socket.broadcast.emit("user-connected", {user:username, color:color});
     });
     socket.on('request-users',()=> {
-        socket.emit('send-users',{users:users, colors:userColors});
+        const usersArray = Array.from(users.values());
+        const colorsObj = Object.fromEntries(userColors); // Convert Map to a plain object
+        socket.emit('send-users',{users:usersArray, colors:colorsObj});
     });
     socket.on("disconnect", () => {
         socket.broadcast.emit("user-disconnected", users.get(socket.id));
         users.delete(socket.id);
     });
     socket.on('sendmessage', message => {
-        socket.broadcast.emit('message',{user:users.get(socket.id), message:message, color:userColors.get(username)});
+        const username = users.get(socket.id);
+        socket.broadcast.emit('message',{user:username, message:message, color:userColors.get(username)});
     });
 
 });

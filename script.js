@@ -1,4 +1,5 @@
-const io = require('socket.io-client');
+import { io } from '/socket.io-client/socket.io.esm.min.js';
+
 const socket = io();
 
 const loginButton = document.getElementById('login-button');
@@ -19,9 +20,9 @@ loginButton.onclick = function () {
         
     if (username != "") {
         userColor = document.getElementById('color').value;
+        //addUser(username,userColor);
         socket.emit('new-user', {user:username, color:userColor});
         socket.emit('request-users');
-        addUser(username,userColor);
         //Styling
         const loginBox = document.querySelector('.login-box');
         const chatBox = document.querySelector('.chat-box');
@@ -50,9 +51,10 @@ socket.on('user-disconnected', name => {
     }
 });
 socket.on('send-users', data => {
-    userColors = data.colors;
-    data.users.forEach(user => {
-        addUser(user, userColors.get(user));
+    const userColors = data.colors; // Plain object
+    data.users.forEach(userName => {
+        const color = userColors[userName];
+        addUser(userName, color);
     });
 });
 socket.on('message', data => {
@@ -111,6 +113,10 @@ function getColor(color) {
             border = "#eb2020";
             background = "#b88181";
             break;
+        case 'orange':
+            border = 'rgb(255, 102, 0)';
+            background = 'rgb(245, 143, 75)';
+            break;
         case 'green':
             border = 'green';
             background = 'lightgreen';
@@ -118,6 +124,10 @@ function getColor(color) {
         case 'blue':
             border = "#06283A";
             background = 'lightblue';
+            break;
+        case  'purple':
+            border = 'rgb(61, 7, 61)';
+            background = 'rgb(177, 54, 177)';
             break;
         default:
             console.warn(`Unexpected color: ${color}`);
