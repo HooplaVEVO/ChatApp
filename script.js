@@ -1,6 +1,6 @@
 import { io } from '/socket.io-client/socket.io.esm.min.js';
 
-const socket = io();
+const socket = io('myleschatapp.click');
 
 const loginButton = document.getElementById('login-button');
 var userColor = 'blue';
