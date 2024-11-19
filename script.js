@@ -20,7 +20,6 @@ loginButton.onclick = function () {
         
     if (username != "") {
         userColor = document.getElementById('color').value;
-        //addUser(username,userColor);
         socket.emit('new-user', {user:username, color:userColor});
         socket.emit('request-users');
         //Styling
