@@ -5,11 +5,12 @@ const http = require('http');
 const path = require('path');
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
-const io = require('socket.io')(server);
-
-app.use(cors({
-    origin: 'https://myleschatapp.click', // Allow all origins, change this to a specific domain for production
-}));
+const io = require('socket.io')(server, {
+    cors: {
+      origin: 'https://myleschatapp.click', // Frontend URL
+      methods: ['GET', 'POST'],
+    },
+  });
 // Serve static files
 app.use(express.static(__dirname));
 app.use('/socket.io-client', express.static(path.join(__dirname, 'node_modules/socket.io-client/dist')));
